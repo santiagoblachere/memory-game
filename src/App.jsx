@@ -1,7 +1,28 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 function App() {
-  const [count, setCount] = useState(0)
+const [pokemons, setPokemons] = useState([])
+const pokemon = async() => {
+    try {
+     const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=10')
+     if (!response.ok) {
+       throw new Error('Fetch failed')
+     }
+     const data = await response.json()
+     return data
+    } catch (error) {
+     console.log(error)
+    }
+} 
+useEffect(() => {
+  pokemon().then(data => {
+    setPokemons(data)
+  })
+}, [])
+
+console.log(pokemons)
+
+
 
   return (
     <>
