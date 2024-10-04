@@ -1,5 +1,11 @@
 .pokemons {
+    width: 1000px;
     display: flex;
     justify-content: center;
     flex-direction: row;
+    flex-wrap: wrap;
+}
+body {
+    display: flex;
+    justify-content: center;
 }
