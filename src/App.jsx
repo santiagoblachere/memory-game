@@ -7,11 +7,22 @@ const [score, setScore] = useState({
   bestScore: 0
 });
 
+function shuffle(array) {
+  let currentIndex = array.length;
+  while (currentIndex != 0) {
 
+    let randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+}
 const getRandomId = () => {
   return Math.floor(Math.random() * 1000)
 }
 const pokemon = async() => {
+  setPokemons([])
     try {
      const pokemonPromises = [];
      while (pokemonPromises.length < 20) {
@@ -59,23 +70,29 @@ const handlePokemonClick = (pokemon) => {
     }));
     pokemon.clicked = true;
   }
+  shuffle(pokemons);
+  setPokemons(pokemons)
 } 
 
 
 
 return (
     <>
-      <h1>COOOL MEMORY GAME HAH!</h1>
-      <button onClick={() => pokemon()}>POKEMONINS</button>
+      <h1>Remember the Pokemons</h1>
+      <button onClick={() => pokemon()}>GET NEW POKEMON</button>
       <h2>START PLAYING BY CLICKING ON A POKEMON!</h2>
-      <h3>your score is {score.currentScore}</h3>
-      <h3>best score is {score.bestScore}</h3>
+      <h3>your current score is {score.currentScore}</h3>
+      <h3>your best score is {score.bestScore}</h3>
       <div className='pokemons'>
-        {pokemons.map(pokemon => (        
+        {
+        pokemons.length === 20 ?
+        pokemons.map(pokemon => (        
           <div key={pokemon.name + pokemon.id}>
             <img onClick={() => handlePokemonClick(pokemon)} src={pokemon.sprites.front_default} alt="pokemon" />
+            <h3>{pokemon.name}</h3>
           </div>
-        ))}
+        )): <p>Loading...</p>
+      } 
       </div>
     </>
   )
