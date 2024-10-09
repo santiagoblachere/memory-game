@@ -80,9 +80,14 @@ return (
     <>
       <h1>Remember the Pokemons</h1>
       <button onClick={() => pokemon()}>GET NEW POKEMON</button>
-      <h2>START PLAYING BY CLICKING ON A POKEMON!</h2>
-      <h3>your current score is {score.currentScore}</h3>
-      <h3>your best score is {score.bestScore}</h3>
+      <div className='score'>
+        <h2>START PLAYING BY CLICKING ON A POKEMON!</h2>
+        <div>
+          <h3>your current score is {score.currentScore}</h3>
+          <h3>your best score is {score.bestScore}</h3>
+        </div>   
+      </div>
+      
       <div className='pokemons'>
         {
         pokemons.length === 20 ?
