@@ -17,31 +17,33 @@ function shuffle(array) {
     [array[currentIndex], array[randomIndex]] = [
       array[randomIndex], array[currentIndex]];
   }
+  return array
 }
 const getRandomId = () => {
   return Math.floor(Math.random() * 1000)
 }
-const pokemon = async() => {
-  setPokemons([])
-    try {
-     const pokemonPromises = [];
-     while (pokemonPromises.length < 20) {
-      let pokemonPromise = fetch(`https://pokeapi.co/api/v2/pokemon/${getRandomId()}`).then(response => response.json()); 
-      let pokemonData = await pokemonPromise    
-      let exists = await pokemonPromises.find(pokemon => pokemon.name === pokemonData.name);
+const pokemon = async () => {
+  setPokemons([]);
+  try {
+    const pokemonDataList = [];
+    while (pokemonDataList.length < 20) {
+      const pokemonPromise = fetch(`https://pokeapi.co/api/v2/pokemon/${getRandomId()}`).then((response) => response.json());
+      const pokemonData = await pokemonPromise;
+
+      const exists = pokemonDataList.find((pokemon) => pokemon.name === pokemonData.name);
       if (!exists) {
-        pokemonPromises.push(pokemonPromise)
+        pokemonDataList.push(pokemonData); 
       }
-     }
-     const pokemons = await Promise.all(pokemonPromises)
-     setPokemons(pokemons)
-    } catch (error) {
-      console.log(error)
     }
-}
+    setPokemons(pokemonDataList); 
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 useEffect(() => {
-  pokemon()
-},[])
+  pokemon();
+}, []);
 
 const handlePokemonClick = (pokemon) => {
   if (pokemon.clicked === true) {
@@ -68,10 +70,12 @@ const handlePokemonClick = (pokemon) => {
       ...prevScore,
       currentScore: prevScore.currentScore + 1
     }));
-    pokemon.clicked = true;
+    const updatedPokemons = pokemons.map((poke) =>
+      poke.name === pokemon.name ? { ...poke, clicked: true } : poke
+    );
+    setPokemons(shuffle([...updatedPokemons]))
   }
-  shuffle(pokemons);
-  setPokemons(pokemons)
+  
 } 
 
 
